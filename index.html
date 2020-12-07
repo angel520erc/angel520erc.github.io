@@ -15,23 +15,65 @@
 			const showDev = $('#showList');
 			const addpip = $('#participantInput').val()
 			if (!addpip) return
-			const addJson = JSON.parse(`{${addid}:${addpip}}`)
-			lotteryList.push(addJson)
+			let addObj = {};
+			addObj[addid] = addpip;
+			lotteryList.push(addObj)
 			console.warn('show', lotteryList)
 			showDev.append(`<div id="${addid}"><spen id="p${addid}">${addpip}</spen> <input type="button" value="-" onclick="deleteClick(${addid})"> </div>`)
 			addid++;
-			$('#participantInput').val = ''
+			$('#participantInput').val('')
 		}
-
 
 		function deleteClick(id) {
-			console.warn('show id', id)
-			console.error('id', `#p${id}`, $(`#p${id}`).text())
 			const deletenumber = $(`#p${id}`).text();
-
+			for (let i = 0; i < this.lotteryList.length; i++) {
+				const lotteryValue = this.lotteryList[i][id];
+				if (deletenumber == lotteryValue) {
+					this.lotteryList.splice(i,1)
+				}
+			}
 			$(`#${id}`).remove();
-
 		}
+
+		function 	sumbitClick() {
+				// var lotteryList = ['阿倫', '單手', '大祐', '小婕', '蚊子']
+				let Rnum = 0;
+				let arr = [];
+				let runNum = this.lotteryList.length
+				for (let i = 0;i < runNum;i++) {
+					Rnum = Math.round(Math.random() * (runNum - 1));
+					if (arr.indexOf(Rnum) === -1 && i !== Rnum) {
+						arr.push(Rnum);
+					} else {
+						if (i == Rnum) {
+							arr = [];
+							i = -1;
+						} else {
+							arr.splice(i, 1);
+							i--;
+						}
+					}
+				}
+				console.log(arr);
+				arr = []
+				for (let pp = 0;pp < name.length;pp++) {
+					console.log(name[pp] + 'to' + arr[pp])
+				}
+			}
+			function showList(listArray) {
+
+			}
+
+			function remakeClick() {
+				let reIdList = []
+				for (let i = 0; i < this.lotteryList.length; i++) {
+					const dId = Object.keys(this.lotteryList[i])[0]
+					reIdList.push(dId)
+				}
+				for (let j = 0; j < reIdList.length; j++) {
+					this.deleteClick(reIdList[j]);
+				}
+			}
 	</script>
 </head>
 <body>
@@ -39,11 +81,14 @@
 		參加者姓名：
 		<input type="text" id="participantInput">
 		<input type="button" id="addbtn" value="+" onclick="addClick()">
+		<input type="button" value="抽籤" onclick="sumbitClick()">
+		<input type="button" value="重製" onclick="remakeClick()">
 	</div>
 <hr/>
 	<div id="showList">
 		參加名單：
-		div
 	</div>
+	<hr />
+	<div id="showSumbitList"></div>
 </body>
 </html>
