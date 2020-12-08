@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<meta charset="UTF-8">
@@ -29,53 +30,70 @@
 			for (let i = 0; i < this.lotteryList.length; i++) {
 				const lotteryValue = this.lotteryList[i][id];
 				if (deletenumber == lotteryValue) {
-					this.lotteryList.splice(i,1)
+					this.lotteryList.splice(i, 1)
 				}
 			}
 			$(`#${id}`).remove();
 		}
 
-		function 	sumbitClick() {
-				// var lotteryList = ['阿倫', '單手', '大祐', '小婕', '蚊子']
-				let Rnum = 0;
-				let arr = [];
-				let runNum = this.lotteryList.length
-				for (let i = 0;i < runNum;i++) {
-					Rnum = Math.round(Math.random() * (runNum - 1));
-					if (arr.indexOf(Rnum) === -1 && i !== Rnum) {
-						arr.push(Rnum);
+		function sumbitClick() {
+			// var lotteryList = ['阿倫', '單手', '大祐', '小婕', '蚊子']
+			let Rnum = 0;
+			let arr = [];
+			let runNum = this.lotteryList.length
+			if (runNum < 2) return
+			for (let i = 0; i < runNum; i++) {
+				Rnum = Math.round(Math.random() * (runNum - 1));
+				if (arr.indexOf(Rnum) === -1 && i !== Rnum) {
+					arr.push(Rnum);
+				} else {
+					if (i == Rnum) {
+						arr = [];
+						i = -1;
 					} else {
-						if (i == Rnum) {
-							arr = [];
-							i = -1;
-						} else {
-							arr.splice(i, 1);
-							i--;
-						}
+						arr.splice(i, 1);
+						i--;
 					}
 				}
-				console.log(arr);
-				arr = []
-				for (let pp = 0;pp < name.length;pp++) {
-					console.log(name[pp] + 'to' + arr[pp])
-				}
 			}
-			function showList(listArray) {
+			this.showList(arr)
+			arr = []
 
+		}
+		function showList(listArray) {
+			let nameList = []
+			this.reShow()
+			for (let i = 0; i < this.lotteryList.length; i++) {
+				const dId = Object.keys(this.lotteryList[i])[0]
+				nameList.push(this.lotteryList[i][dId])
 			}
+			const showDev = $('#showSumbitList');
+			for (let j = 0; j < listArray.length; j++) {
+				showDev.append(`<div class='divSumbit'><span>${nameList[j]}</span>→<span>${nameList[listArray[j]]}</span></div>`)
+			}
+		}
 
-			function remakeClick() {
-				let reIdList = []
-				for (let i = 0; i < this.lotteryList.length; i++) {
-					const dId = Object.keys(this.lotteryList[i])[0]
-					reIdList.push(dId)
-				}
-				for (let j = 0; j < reIdList.length; j++) {
-					this.deleteClick(reIdList[j]);
-				}
+		function reShow() {
+			const devSumbitArray = $('.divSumbit');
+			for (let i = 0; i < devSumbitArray.length; i++) {
+				devSumbitArray[i].remove();
 			}
+		}
+
+		function remakeClick() {
+			let reIdList = []
+			for (let i = 0; i < this.lotteryList.length; i++) {
+				const dId = Object.keys(this.lotteryList[i])[0]
+				reIdList.push(dId)
+			}
+			for (let j = 0; j < reIdList.length; j++) {
+				this.deleteClick(reIdList[j]);
+			}
+			this.reShow()
+		}
 	</script>
 </head>
+
 <body>
 	<div>
 		參加者姓名：
@@ -84,11 +102,13 @@
 		<input type="button" value="抽籤" onclick="sumbitClick()">
 		<input type="button" value="重製" onclick="remakeClick()">
 	</div>
-<hr/>
+	<hr />
 	<div id="showList">
 		參加名單：
 	</div>
 	<hr />
-	<div id="showSumbitList"></div>
+	<div id="showSumbitList">
+	</div>
 </body>
+
 </html>
