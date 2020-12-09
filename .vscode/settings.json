@@ -1,0 +1,11 @@
+{
+	"liveServer.settings.port": 1399,
+	"liveServer.settings.useLocalIp": true,
+	"liveServer.settings.host": "localhost",
+	"liveServer.settings.https": {
+		"enable": false,
+		"cert": "C:\\cert\\localhost+2.pem",
+		"key": "C:\\cert\\localhost+2-key.pem",
+		"passphrase": "12345"
+	}
+}
