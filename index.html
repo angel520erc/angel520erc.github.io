@@ -86,12 +86,18 @@
 				$.ajax({
 					type: 'post',
 					url: 'https://notify-api.line.me/api/notify',
-					headers: { 'Authorization': 'Bearer ' + lineIdList[j] },
-					payload: { 'message': `2020送禮對象：${nameList[listArray[j]]}` },
+					contentType: 'application/x-www-form-urlencoded',
+					headers: {
+						'X-Access-Token': 'Access-Control-Allow-Headers',
+						'Access-Control-Allow-Origin': '*',
+						'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE',
+						'Authorization': 'Bearer ' + lineIdList[j]
+					},
+					data: JSON.stringify({ payload: { 'message': `2020送禮對象：${nameList[listArray[j]]}` } }),
 					cache: false,
 					dataType: 'json',
 					success: function (data) {
-						console.log('succes:::',data)
+						console.log('succes:::', data)
 					}
 				});
 			}
