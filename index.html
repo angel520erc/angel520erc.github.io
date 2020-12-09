@@ -2,19 +2,21 @@
 <html lang="en">
 
 <head>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<title>小天使抽籤</title>
 	<script>
-		var lotteryList = []
+		var lotteryList = [{ 0: '小婕' }, { 1: '蚊子' }, { 2: '阿倫' }, { 3: '單手' }, { 4: '大祐' }]
 		var addid = 0;
+		var lineIdList = ['J6NmPxPSfoWjBwWGjTCgWqh0gJlpAETPV8BtdYv4UM2', '0qcxJzb8ABy2GLgyYtPhrzH8M0IopZKNpdkyXmykE6u', 'jsoUHHk75hWrI37RCSliTevGIzQe93TQIJj9BKwvCFQ', 'FwNvmigTG4K2kWguQvV59Rjcwr8HAj3S93uQtJEP2EC', 'mlfL0ryI4tJmepTuaUHq48eKcJ7fplgNqJ6ChZTs7S5']
 		$(function () {
 
 		});
 		function addClick() {
 			const showDev = $('#showList');
 			const addpip = $('#participantInput').val()
+			const addLineId = $('#lineIdInput').val()
 			if (!addpip) return
 			let addObj = {};
 			addObj[addid] = addpip;
@@ -27,7 +29,7 @@
 
 		function deleteClick(id) {
 			const deletenumber = $(`#p${id}`).text();
-			for (let i = 0;i < this.lotteryList.length;i++) {
+			for (let i = 0; i < this.lotteryList.length; i++) {
 				const lotteryValue = this.lotteryList[i][id];
 				if (deletenumber == lotteryValue) {
 					this.lotteryList.splice(i, 1)
@@ -42,7 +44,7 @@
 			let arr = [];
 			let runNum = this.lotteryList.length
 			if (runNum < 2) return
-			for (let i = 0;i < runNum;i++) {
+			for (let i = 0; i < runNum; i++) {
 				Rnum = Math.round(Math.random() * (runNum - 1));
 				if (arr.indexOf(Rnum) === -1 && i !== Rnum) {
 					arr.push(Rnum);
@@ -56,49 +58,59 @@
 					}
 				}
 			}
-			this.showList(arr)
+			// this.showList(arr)
+			this.sendMessage(arr)
 			arr = []
 
 		}
 		function showList(listArray) {
 			let nameList = []
 			this.reShow()
-			for (let i = 0;i < this.lotteryList.length;i++) {
+			for (let i = 0; i < this.lotteryList.length; i++) {
 				const dId = Object.keys(this.lotteryList[i])[0]
 				nameList.push(this.lotteryList[i][dId])
 			}
 			const showDev = $('#showSumbitList');
-			for (let j = 0;j < listArray.length;j++) {
+			for (let j = 0; j < listArray.length; j++) {
 				showDev.append(`<div class='divSumbit'><span>${nameList[j]}</span>→<span>${nameList[listArray[j]]}</span></div>`)
 			}
 		}
 
 		function sendMessage(listArray) {
-			$.ajax({
-				type: 'post',
-				url: 'Notice_noTipsNotice',
-				data: formParam,
-				cache: false,
-				dataType: 'json',
-				success: function (data) {
-				}
-			});
+			let nameList = []
+			for (let i = 0; i < this.lotteryList.length; i++) {
+				const dId = Object.keys(this.lotteryList[i])[0]
+				nameList.push(this.lotteryList[i][dId])
+			}
+			for (let j = 0; j < listArray.length; j++) {
+				$.ajax({
+					type: 'post',
+					url: 'https://notify-api.line.me/api/notify',
+					headers: { 'Authorization': 'Bearer ' + lineIdList[j] },
+					payload: { 'message': `2020送禮對象：${nameList[listArray[j]]}` },
+					cache: false,
+					dataType: 'json',
+					success: function (data) {
+						console.log('succes:::',data)
+					}
+				});
+			}
 		}
 
 		function reShow() {
 			const devSumbitArray = $('.divSumbit');
-			for (let i = 0;i < devSumbitArray.length;i++) {
+			for (let i = 0; i < devSumbitArray.length; i++) {
 				devSumbitArray[i].remove();
 			}
 		}
 
 		function remakeClick() {
 			let reIdList = []
-			for (let i = 0;i < this.lotteryList.length;i++) {
+			for (let i = 0; i < this.lotteryList.length; i++) {
 				const dId = Object.keys(this.lotteryList[i])[0]
 				reIdList.push(dId)
 			}
-			for (let j = 0;j < reIdList.length;j++) {
+			for (let j = 0; j < reIdList.length; j++) {
 				this.deleteClick(reIdList[j]);
 			}
 			this.reShow()
@@ -110,6 +122,7 @@
 	<div>
 		參加者姓名：
 		<input type="text" id="participantInput">
+		<!-- <input type="text" id="lineIdInput"> -->
 		<input type="button" id="addbtn" value="+" onclick="addClick()">
 		<input type="button" value="抽籤" onclick="sumbitClick()">
 		<input type="button" value="重製" onclick="remakeClick()">
