@@ -27,7 +27,7 @@
 
 		function deleteClick(id) {
 			const deletenumber = $(`#p${id}`).text();
-			for (let i = 0; i < this.lotteryList.length; i++) {
+			for (let i = 0;i < this.lotteryList.length;i++) {
 				const lotteryValue = this.lotteryList[i][id];
 				if (deletenumber == lotteryValue) {
 					this.lotteryList.splice(i, 1)
@@ -42,7 +42,7 @@
 			let arr = [];
 			let runNum = this.lotteryList.length
 			if (runNum < 2) return
-			for (let i = 0; i < runNum; i++) {
+			for (let i = 0;i < runNum;i++) {
 				Rnum = Math.round(Math.random() * (runNum - 1));
 				if (arr.indexOf(Rnum) === -1 && i !== Rnum) {
 					arr.push(Rnum);
@@ -63,30 +63,42 @@
 		function showList(listArray) {
 			let nameList = []
 			this.reShow()
-			for (let i = 0; i < this.lotteryList.length; i++) {
+			for (let i = 0;i < this.lotteryList.length;i++) {
 				const dId = Object.keys(this.lotteryList[i])[0]
 				nameList.push(this.lotteryList[i][dId])
 			}
 			const showDev = $('#showSumbitList');
-			for (let j = 0; j < listArray.length; j++) {
+			for (let j = 0;j < listArray.length;j++) {
 				showDev.append(`<div class='divSumbit'><span>${nameList[j]}</span>→<span>${nameList[listArray[j]]}</span></div>`)
 			}
 		}
 
+		function sendMessage(listArray) {
+			$.ajax({
+				type: 'post',
+				url: 'Notice_noTipsNotice',
+				data: formParam,
+				cache: false,
+				dataType: 'json',
+				success: function (data) {
+				}
+			});
+		}
+
 		function reShow() {
 			const devSumbitArray = $('.divSumbit');
-			for (let i = 0; i < devSumbitArray.length; i++) {
+			for (let i = 0;i < devSumbitArray.length;i++) {
 				devSumbitArray[i].remove();
 			}
 		}
 
 		function remakeClick() {
 			let reIdList = []
-			for (let i = 0; i < this.lotteryList.length; i++) {
+			for (let i = 0;i < this.lotteryList.length;i++) {
 				const dId = Object.keys(this.lotteryList[i])[0]
 				reIdList.push(dId)
 			}
-			for (let j = 0; j < reIdList.length; j++) {
+			for (let j = 0;j < reIdList.length;j++) {
 				this.deleteClick(reIdList[j]);
 			}
 			this.reShow()
