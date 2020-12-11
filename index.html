@@ -7,9 +7,8 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<title>小天使抽籤</title>
 	<script>
-		var lotteryList = [{ 0: '小婕' }, { 1: '蚊子' }, { 2: '阿倫' }, { 3: '單手' }, { 4: '大祐' }]
+		var lotteryList = []
 		var addid = 0;
-		var lineIdList = ['J6NmPxPSfoWjBwWGjTCgWqh0gJlpAETPV8BtdYv4UM2', '0qcxJzb8ABy2GLgyYtPhrzH8M0IopZKNpdkyXmykE6u', 'jsoUHHk75hWrI37RCSliTevGIzQe93TQIJj9BKwvCFQ', 'FwNvmigTG4K2kWguQvV59Rjcwr8HAj3S93uQtJEP2EC', 'mlfL0ryI4tJmepTuaUHq48eKcJ7fplgNqJ6ChZTs7S5']
 		$(function () {
 
 		});
@@ -58,8 +57,7 @@
 					}
 				}
 			}
-			// this.showList(arr)
-			this.sendMessage(arr)
+			this.showList(arr)
 			arr = []
 
 		}
@@ -73,33 +71,6 @@
 			const showDev = $('#showSumbitList');
 			for (let j = 0; j < listArray.length; j++) {
 				showDev.append(`<div class='divSumbit'><span>${nameList[j]}</span>→<span>${nameList[listArray[j]]}</span></div>`)
-			}
-		}
-
-		function sendMessage(listArray) {
-			let nameList = []
-			for (let i = 0; i < this.lotteryList.length; i++) {
-				const dId = Object.keys(this.lotteryList[i])[0]
-				nameList.push(this.lotteryList[i][dId])
-			}
-			for (let j = 0; j < listArray.length; j++) {
-				$.ajax({
-					type: 'post',
-					url: 'https://notify-api.line.me/api/notify',
-					contentType: 'application/x-www-form-urlencoded',
-					headers: {
-						'X-Access-Token': 'Access-Control-Allow-Headers',
-						'Access-Control-Allow-Origin': '*',
-						'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE',
-						'Authorization': 'Bearer ' + lineIdList[j]
-					},
-					data: JSON.stringify({ payload: { 'message': `2020送禮對象：${nameList[listArray[j]]}` } }),
-					cache: false,
-					dataType: 'json',
-					success: function (data) {
-						console.log('succes:::', data)
-					}
-				});
 			}
 		}
 
