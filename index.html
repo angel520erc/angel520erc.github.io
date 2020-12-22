@@ -10,7 +10,11 @@
 		var lotteryList = []
 		var addid = 0;
 		$(function () {
-
+			document.addEventListener('visibilitychange', function(e) {
+      if (!document.hidden) {
+        alter('show view')
+      }
+    })
 		});
 		function addClick() {
 			const showDev = $('#showList');
